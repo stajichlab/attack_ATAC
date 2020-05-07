@@ -1,8 +1,7 @@
 #!/usr/bin/bash
 module load samtools
 module load bedtools
-
-mkdir -p genome
+mkdir -p genome logs
 pushd genome
 FILE=Oryza_sativa.IRGSP-1.0.30.dna.toplevel.fa
 if [[ ! -s $FILE ]]; then
