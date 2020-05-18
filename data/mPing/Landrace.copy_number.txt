@@ -1,0 +1,6 @@
+Landrace	mPing	Ping	Pong	mPing_RelocaTE2	Ping_RelocaTE2	Pong_RelocaTE2
+EG4	437	7	5	473	7	4
+HEG4	503	7	5	518	6	4
+A119	333	7	6	365	7	5
+A123	231	10	6	268	11	5
+NB	51	1	6

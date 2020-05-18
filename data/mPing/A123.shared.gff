@@ -1,0 +1,8 @@
+Chr12	A123	transposable_element_insertion_site	839604	840033	.	.	.	ID=mping.te_insertion_site.Chr12.839604..840033;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=22;right_flanking_read_count=28
+Chr3	A123	transposable_element_insertion_site	9568670	9569099	.	.	.	ID=mping.te_insertion_site.Chr3.9568670..9569099;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=17;right_flanking_read_count=19
+Chr3	A123	transposable_element_insertion_site	9240074	9240503	.	.	.	ID=mping.te_insertion_site.Chr3.9240074..9240503;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=16;right_flanking_read_count=22
+Chr3	A123	transposable_element_insertion_site	12735756	12736185	.	.	.	ID=mping.te_insertion_site.Chr3.12735756..12736185;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=28;right_flanking_read_count=17
+Chr3	A123	transposable_element_insertion_site	34592545	34592974	.	.	.	ID=mping.te_insertion_site.Chr3.34592545..34592974;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=15;right_flanking_read_count=17
+Chr6	A123	transposable_element_insertion_site	13737618	13738047	.	.	.	ID=mping.te_insertion_site.Chr6.13737618..13738047;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=8;right_flanking_read_count=7
+Chr6	A123	transposable_element_insertion_site	30099538	30099967	.	.	.	ID=mping.te_insertion_site.Chr6.30099538..30099967;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=17;right_flanking_read_count=14
+Chr7	A123	transposable_element_insertion_site	4560975	4561404	.	.	.	ID=mping.te_insertion_site.Chr7.4560975..4561404;TE_Name=mping;Note=Shared, in ref and reads;left_flanking_read_count=30;right_flanking_read_count=3
