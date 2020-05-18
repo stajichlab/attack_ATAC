@@ -18,3 +18,5 @@ if [[ ! -s $FILE ]]; then
 	curl -L ftp://ftp.ensemblgenomes.org/pub/release-30/plants/gff3/oryza_sativa/$FILE.gz | pigz -d > $FILE
 fi
 
+# this only works on UCR cluster
+rsync -a /bigdata/stajichlab/jstajich/projects/attack_ATAC/bam ./
