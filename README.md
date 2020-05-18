@@ -4,6 +4,7 @@ ATAC seq analyis
 to run
 ```
 git clone https://github.com/stajichlab/attack_ATAC.git
+cd attack_ATAC
 sbatch run_pipeline.sh
 ```
 
