@@ -14,10 +14,10 @@ CPUS=$CPU
 
 BAM=bam
 GENOME=genome/Oryza_sativa.IRGSP-1.0.30.dna.toplevel.fa
-COV=coverage/windows
+COV=coverage/processed_windows
 mkdir -p $COV
 # could do this with parallel with 2 arguments but that's prob even more confusing...
-for WINDOW in 5000 10000 1000
+for WINDOW in 10000 5000 1000 500
 do
     parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
 		 -j $CPUS mosdepth -f $GENOME -x -n --by $WINDOW $COV/{///}_{/.}_w${WINDOW} {} ::: $(ls $BAM/*/*.bam)
