@@ -2,7 +2,8 @@
 #SBATCH -p short
 
 module load bedtools
-OUTDIR=windows
+OUTDIR=01processed_windows
+windows
 GENOMETAB=genome/Oryza_sativa.IRGSP-1.0.30.chroms.tab
 if [ ! -f $GENOMETAB ]; then
 	module load samtools
@@ -13,6 +14,7 @@ mkdir -p $OUTDIR
 
 
 
-bedtools makewindows -g genome/Oryza_sativa.IRGSP-1.0.30.chroms.tab -w 5000  > $OUTDIR/Oryza_sativa.IRGSP-1.0.30.windows_5kb.bed
 bedtools makewindows -g genome/Oryza_sativa.IRGSP-1.0.30.chroms.tab -w 10000  > $OUTDIR/Oryza_sativa.IRGSP-1.0.30.windows_10kb.bed
+bedtools makewindows -g genome/Oryza_sativa.IRGSP-1.0.30.chroms.tab -w 5000  > $OUTDIR/Oryza_sativa.IRGSP-1.0.30.windows_5kb.bed
 bedtools makewindows -g genome/Oryza_sativa.IRGSP-1.0.30.chroms.tab -w 1000  > $OUTDIR/Oryza_sativa.IRGSP-1.0.30.windows_1kb.bed
+bedtools makewindows -g genome/Oryza_sativa.IRGSP-1.0.30.chroms.tab -w 500  > $OUTDIR/Oryza_sativa.IRGSP-1.0.30.windows_500bp.bed
