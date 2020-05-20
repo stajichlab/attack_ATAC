@@ -60,6 +60,8 @@ do
 	for BAMFILE  in $(ls $BAM/*/*.bam)
 	do
 		EPI=$(basename `dirname $BAMFILE`)
-		mosdepth -t $CPUS -f $GENOME -n -x --by $BED $COV/${EPI}.${NEWBASE} $BAMFILE
+		SAMPLE=$(basename $BAMFILE .bam)
+		mosdepth -t $CPUS -f $GENOME -n -x --by $BED $COV/${EPI}.${SAMPLE}.${NEWBASE} $BAMFILE
 	done
 done
+
