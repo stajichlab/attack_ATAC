@@ -9,4 +9,4 @@ sbatch run_pipeline.sh
 ```
 
 See the output in coverage/pre_mPing
-
+See plots in plots folder
