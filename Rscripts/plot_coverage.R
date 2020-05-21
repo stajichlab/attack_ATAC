@@ -5,7 +5,7 @@ library(ggplot2)
 library(gridExtra)
 
 # create list of all .csv files in folder
-infolder="coverage/processed_empty"
+infolder <- "/rhome/ysun/bigdata/epigenome/attack_ATAC/coverage/processed_empty/ATAC"
 plotfolder="plots"
 
 # functions
@@ -13,7 +13,7 @@ plot_histo <- function(bedfile) {
   bname = file_path_sans_ext(basename(bedfile),compression=TRUE)
   bname=gsub("\\.region","",bname,perl=TRUE)
   bedin <- read.table(bedfile, col.names = c("Chr", "Start", "End","Name","Coverage"), sep="\t")
-  pdfname=sprintf("%s/%s.pdf",plotfolder,bname)
+  pdfname=sprintf("%s/%shist.pdf",plotfolder,bname)
   pdf(pdfname,width=6)
   hist(bedin$Coverage,
        main=paste("Histogram from", bname),
@@ -25,9 +25,21 @@ plot_histo <- function(bedfile) {
        ylim=c(0,15),
        las=1,
        breaks=100)
+  
+  dev.off()
+} 
 
-    dev.off()
-    ggplot(bedin, aes(x=factor(Chr),y=Coverage,group=factor(Chr))) +
+# main code
+file_list <- list.files(path=infolder, pattern="bed.gz$",full.names=TRUE)
+plots <- lapply(file_list,plot_histo)
+
+# Functions 2
+plot_box <- function(bedfile) {
+  bname = file_path_sans_ext(basename(bedfile),compression=TRUE)
+  bname=gsub("\\.region","",bname,perl=TRUE)
+  bedin <- read.table(bedfile, col.names = c("Chr", "Start", "End","Name","Coverage"), sep="\t")
+  pdfnamebox= sprintf("%s/%sbox.pdf",plotfolder,bname)
+  boxplot = ggplot(bedin, aes(x=factor(Chr),y=Coverage,group=factor(Chr))) +
     geom_boxplot() +
     geom_jitter(color="black", size=0.4, alpha=0.9) +
     theme_bw() +
@@ -36,13 +48,10 @@ plot_histo <- function(bedfile) {
       plot.title = element_text(size=11)
     ) + ggtitle(sprintf("Coverage of %s",bname)) +
     xlab("Chromosome")
-
+  ggnamebox= sprintf("%sbox.pdf", bname)
+  ggsave(path = plotfolder, ggnamebox, device = "pdf")
 }
 
 # main code
 file_list <- list.files(path=infolder, pattern="bed.gz$",full.names=TRUE)
-
-plots <- lapply(file_list,plot_histo)
-outplotfile <- file.path(plotfolder,"boxplot_example.pdf")
-ggsave(outplotfile, marrangeGrob(grobs = plots, nrow=3, ncol=3),width=15,height=15)
-#plot_histo("coverage/processed_empty/H3K27me3.A119.rep1.A119_empty.1000_window.regions.bed.gz")
+plotsbox <- lapply(file_list,plot_box)
