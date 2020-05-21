@@ -54,10 +54,11 @@ bedtools slop -i $TMP/A119_empty_sites.bed -g $GENOME.genome -b 500 > $TMP/A119_
 for BED in $(ls $TMP/*_window.bed)
 do
 	NEWBASE=$(basename $BED .bed)
+	STRAIN=$(echo $NEWBASE | perl -p -e 's/_empty\.\S+//')
 	# could replace this with parallel code
 	# parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
 	#	 -j $CPUS mosdepth -f $GENOME -x -n --by $BED $COV/{///}_{/.}${NEWBASE} {} ::: $(ls $BAM/*/*.bam)
-	for BAMFILE  in $(ls $BAM/*/*.bam)
+	for BAMFILE  in $(ls $BAM/*/$STRAIN.*.bam)
 	do
 		EPI=$(basename `dirname $BAMFILE`)
 		SAMPLE=$(basename $BAMFILE .bam)
