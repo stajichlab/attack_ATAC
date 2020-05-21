@@ -22,3 +22,18 @@ do
     parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
 		 -j $CPUS mosdepth -f $GENOME -x -n --by $WINDOW $COV/{///}_{/.}_w${WINDOW} {} ::: $(ls $BAM/*/*.bam)
 done
+
+mkdir coverage/processed_windows/tmp
+mv coverage/processed_windows/*bed.gz.csi coverage/processed_windows/tmp
+mv coverage/processed_windows/*global.dist.txt coverage/processed_windows/tmp
+mv coverage/processed_windows/*region.dist.txt coverage/processed_windows/tmp
+
+mkdir coverage/processed_windows/ATAC
+mkdir coverage/processed_windows/H3K27me3
+mkdir coverage/processed_windows/H3K36me3
+mkdir coverage/processed_windows/H3K56ac
+
+mv coverage/processed_windows/ATAC* coverage/processed_windows/ATAC
+mv coverage/processed_windows/H3K27me3* coverage/processed_windows/H3K27me3
+mv coverage/processed_windows/H3K36me3* coverage/processed_windows/H3K36me3
+mv coverage/processed_windows/H3K56ac* coverage/processed_windows/H3K56ac
