@@ -54,6 +54,7 @@ mkdir coverage/processed_background/tmp
 mv coverage/processed_background/*bed.gz.csi coverage/processed_background/tmp
 mv coverage/processed_background/*global.dist.txt coverage/processed_background/tmp
 mv coverage/processed_background/*region.dist.txt coverage/processed_background/tmp
+mv coverage/processed_background/*.summary.txt coverage/processed_background/tmp
 
 mkdir coverage/processed_background/ATAC
 mkdir coverage/processed_background/H3K27me3
