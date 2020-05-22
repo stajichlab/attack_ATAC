@@ -27,16 +27,33 @@ TMP=05_processed_background
 mkdir -p $COV $TMP
 
 #
-cat $MPING/Simulate0001.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_background_sites.bed
+cat $MPING/Simulate0001_100.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_100_background_sites.bed
+cat $MPING/Simulate0001_165.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_165_background_sites.bed
+cat $MPING/Simulate0001_208.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_208_background_sites.bed
+cat $MPING/Simulate0001_310.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_310_background_sites.bed
+cat $MPING/Simulate0001_99.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_99_background_sites.bed
 cat $MPING/Simulate0002.gff | cut -f 1,4,5,9 | > $TMP/Simulate0002_background_sites.bed
 
 
 # use -b to add to both sides
-bedtools slop -i $TMP/Simulate0001_background_sites.bed -g $GENOME.genome -b 250  > $TMP/Simulate0001_background_sites.500_window.bed
-bedtools slop -i $TMP/Simulate0001_background_sites.bed -g $GENOME.genome -b 500  > $TMP/Simulate0001_background_sites.1000_window.bed
+bedtools slop -i $TMP/Simulate0001_100_background_sites.bed -g $GENOME.genome -b 250  > $TMP/Simulate0001_100_background_sites.500_window.bed
+bedtools slop -i $TMP/Simulate0001_100_background_sites.bed -g $GENOME.genome -b 500  > $TMP/Simulate0001_100_background_sites.1000_window.bed
+
+bedtools slop -i $TMP/Simulate0001_165_background_sites.bed -g $GENOME.genome -b 250  > $TMP/Simulate0001_165_background_sites.500_window.bed
+bedtools slop -i $TMP/Simulate0001_165_background_sites.bed -g $GENOME.genome -b 500  > $TMP/Simulate0001_165_background_sites.1000_window.bed
+
+bedtools slop -i $TMP/Simulate0001_208_background_sites.bed -g $GENOME.genome -b 250  > $TMP/Simulate0001_208_background_sites.500_window.bed
+bedtools slop -i $TMP/Simulate0001_208_background_sites.bed -g $GENOME.genome -b 500  > $TMP/Simulate0001_208_background_sites.1000_window.bed
+
+bedtools slop -i $TMP/Simulate0001_310_background_sites.bed -g $GENOME.genome -b 250  > $TMP/Simulate0001_310_background_sites.500_window.bed
+bedtools slop -i $TMP/Simulate0001_310_background_sites.bed -g $GENOME.genome -b 500  > $TMP/Simulate0001_310_background_sites.1000_window.bed
+
+bedtools slop -i $TMP/Simulate0001_99_background_sites.bed -g $GENOME.genome -b 250  > $TMP/Simulate0001_99_background_sites.500_window.bed
+bedtools slop -i $TMP/Simulate0001_99_background_sites.bed -g $GENOME.genome -b 500  > $TMP/Simulate0001_99_background_sites.1000_window.bed
 
 bedtools slop -i $TMP/Simulate0002_background_sites.bed -g $GENOME.genome -b 250  > $TMP/Simulate0002_background_sites.500_window.bed
 bedtools slop -i $TMP/Simulate0002_background_sites.bed -g $GENOME.genome -b 500  > $TMP/Simulate0002_background_sites.1000_window.bed
+
 
 for BED in $(ls $TMP/*_window.bed)
 do
