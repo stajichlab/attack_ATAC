@@ -6,6 +6,7 @@ module load mosdepth
 module unload perl
 module load parallel
 
+
 CPU=$SLURM_CPUS_ON_NODE
 if [ -z $CPU ]; then
 	CPU=1
@@ -26,13 +27,14 @@ COV=coverage/processed_background
 TMP=05_processed_background
 mkdir -p $COV $TMP
 
-#
-cat $MPING/Simulate0001_100.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_100_background_sites.bed
-cat $MPING/Simulate0001_165.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_165_background_sites.bed
-cat $MPING/Simulate0001_208.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_208_background_sites.bed
-cat $MPING/Simulate0001_310.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_310_background_sites.bed
-cat $MPING/Simulate0001_99.gff | cut -f 1,4,5,9 | > $TMP/Simulate0001_99_background_sites.bed
-cat $MPING/Simulate0002.gff | cut -f 1,4,5,9 | > $TMP/Simulate0002_background_sites.bed
+# For HEG4 and EG4
+# Get HEG4 empty sites (mPing in EG4 but not in HEG4)
+cat $MPING/Simulate0001_100.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/Simulate0001_100_background_sites.bed
+cat $MPING/Simulate0001_165.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//'  > $TMP/Simulate0001_165_background_sites.bed
+cat $MPING/Simulate0001_208.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//'  > $TMP/Simulate0001_208_background_sites.bed
+cat $MPING/Simulate0001_310.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//'  > $TMP/Simulate0001_310_background_sites.bed
+cat $MPING/Simulate0001_99.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//'  > $TMP/Simulate0001_99_background_sites.bed
+cat $MPING/Simulate0002.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//'  > $TMP/Simulate0002_background_sites.bed
 
 
 # use -b to add to both sides
