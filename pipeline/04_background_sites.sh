@@ -41,15 +41,17 @@ do
     background=$TMP/${base}_background_sites
     cut -f1,4,5,9 $infile | perl -p -e 's/^Chr//; s/ID=//;' > $background.bed
 
-    # use -b to add to both sides
-    bedtools slop -i $background.bed -g $GENOME.genome -b 250  > $background.1000_window.bed
-    bedtools slop -i $background.bed -g $GENOME.genome -b 500  > $background.500_window.bed
-done
-
-for BED in $(ls $TMP/*_window.bed)
-do
-	NEWBASE=$(basename $BED .bed)
-# this parallel code will create a variable {///} which will be the name of folder in BAM directory (eg ATAC, H3K56ac)
-    parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
-		-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BED $COV/{///}/{///}.{/.}.${NEWBASE} {} ::: $(ls $BAM/*/*.bam)
+	for size in 250 500
+	do
+		total=$(expr $size \* 2)
+		# use -b to add to both sides
+		BEDFILE=$background.${total}_window.bed
+		bedtools slop -i $background.bed -g $GENOME.genome -b $size  > $BEDFILE
+		NEWBASE=$(basename $BEDFILE _window.bed)
+		for strain in HEG4 EG4 A123 A119
+		do
+			parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
+				-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BEDFILE $COV/{///}/{///}_{/.}.${NEWBASE} {} ::: $(ls $BAM/*/${strain}*.bam)
+		done
+	done
 done

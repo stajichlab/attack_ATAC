@@ -51,15 +51,11 @@ do
 	total=$(expr $size \* 2)
 	for strain in HEG4 EG4 A123 A119
 	do
-		bedtools slop -i $TMP/${strain}_empty_sites.bed -g $GENOME.genome -b $size  > $TMP/{$strain}_empty.${total}_window.bed
+		BEDFILE=$TMP/${strain}_empty.${total}_window.bed
+		NEWBASE=${strain}_empty.${total}
+		bedtools slop -i $TMP/${strain}_empty_sites.bed -g $GENOME.genome -b $size  > $BEDFILE
+
+		parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
+		-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BEDFILE $COV/{///}/{///}_{/.}.${NEWBASE} {} ::: $(ls $BAM/*/${strain}*.bam)
 	done
-done
-
-for BED in $(ls $TMP/*_window.bed)
-do
-	NEWBASE=$(basename $BED .bed)
-# this parallel code will create a variable {///} which will be the name of folder in BAM directory (eg ATAC, H3K56ac)
-    parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
-		-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BED $COV/{///}/{///}_{/.}_w${WINDOW} {} ::: $(ls $BAM/*/*.bam)
-
 done
