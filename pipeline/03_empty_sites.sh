@@ -1,14 +1,22 @@
 #!/usr/bin/bash
-#SBATCH -p short --mem 8gb -N 1 -n 8 --out logs/coverage.log
+#SBATCH -p short --mem 24gb -N 1 -n 24 --out logs/empty_sites.log
 
 module load bedtools
 module load mosdepth
+module unload perl
+module load parallel
 
 CPU=$SLURM_CPUS_ON_NODE
 if [ -z $CPU ]; then
 	CPU=1
 fi
-CPUS=$CPU
+
+CPUS=$(expr $CPU / 2)
+MOSCPU=2 # lets run mosdepth with 2 cores
+if [[ $CPUS -lt 1 ]]; then
+	CPUS=1
+	MOSCPU=1
+fi
 
 BAM=bam
 MPING=data/mPing
@@ -38,54 +46,20 @@ bedtools intersect -a $MPING/A119.gff -b $MPING/A123.gff -v | cut -f 1,4,5,9 | p
 bedtools intersect -a $MPING/A123.gff -b $MPING/A119.gff -v | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/A119_empty_sites.bed
 
 # use -b to add to both sides
-bedtools slop -i $TMP/EG4_empty_sites.bed -g $GENOME.genome -b 250  > $TMP/EG4_empty.500_window.bed
-bedtools slop -i $TMP/EG4_empty_sites.bed -g $GENOME.genome -b 500  > $TMP/EG4_empty.1000_window.bed
-
-bedtools slop -i $TMP/HEG4_empty_sites.bed -g $GENOME.genome -b 250 > $TMP/HEG4_empty.500_window.bed
-bedtools slop -i $TMP/HEG4_empty_sites.bed -g $GENOME.genome -b 500 > $TMP/HEG4_empty.1000_window.bed
-
-bedtools slop -i $TMP/A123_empty_sites.bed -g $GENOME.genome -b 250  > $TMP/A123_empty.500_window.bed
-bedtools slop -i $TMP/A123_empty_sites.bed -g $GENOME.genome -b 500  > $TMP/A123_empty.1000_window.bed
-
-bedtools slop -i $TMP/A119_empty_sites.bed -g $GENOME.genome -b 250 > $TMP/A119_empty.500_window.bed
-bedtools slop -i $TMP/A119_empty_sites.bed -g $GENOME.genome -b 500 > $TMP/A119_empty.1000_window.bed
-
-for BED in $(ls $TMP/*_window.bed)
+for size in 250 500
 do
-	NEWBASE=$(basename $BED .bed)
-	for BAMFILE  in $(ls $BAM/*/*.bam)
+	total=$(expr $size \* 2)
+	for strain in HEG4 EG4 A123 A119
 	do
-		EPI=ATAC
-		mosdepth -t $CPUS -f $GENOME -n -x --by $BED $COV/${EPI}.${NEWBASE} $BAMFILE
+		bedtools slop -i $TMP/${strain}_empty_sites.bed -g $GENOME.genome -b $size  > $TMP/{$strain}_empty.${total}_window.bed
 	done
 done
 
 for BED in $(ls $TMP/*_window.bed)
 do
 	NEWBASE=$(basename $BED .bed)
-	STRAIN=$(echo $NEWBASE | perl -p -e 's/_empty\.\S+//')
-	# could replace this with parallel code
-	# parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
-	#	 -j $CPUS mosdepth -f $GENOME -x -n --by $BED $COV/{///}_{/.}${NEWBASE} {} ::: $(ls $BAM/*/*.bam)
-	for BAMFILE  in $(ls $BAM/*/$STRAIN.*.bam)
-	do
-		EPI=$(basename `dirname $BAMFILE`)
-		SAMPLE=$(basename $BAMFILE .bam)
-		mosdepth -t $CPUS -f $GENOME -n -x --by $BED $COV/${EPI}.${SAMPLE}.${NEWBASE} $BAMFILE
-	done
+# this parallel code will create a variable {///} which will be the name of folder in BAM directory (eg ATAC, H3K56ac)
+    parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
+		-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BED $COV/{///}/{///}_{/.}_w${WINDOW} {} ::: $(ls $BAM/*/*.bam)
+
 done
-
-mkdir coverage/processed_empty/tmp
-mv coverage/processed_empty/*bed.gz.csi coverage/processed_empty/tmp
-mv coverage/processed_empty/*global.dist.txt coverage/processed_empty/tmp
-mv coverage/processed_empty/*region.dist.txt coverage/processed_empty/tmp
-
-mkdir coverage/processed_empty/ATAC
-mkdir coverage/processed_empty/H3K27me3
-mkdir coverage/processed_empty/H3K36me3
-mkdir coverage/processed_empty/H3K56ac
-
-mv coverage/processed_empty/ATAC* coverage/processed_empty/ATAC
-mv coverage/processed_empty/H3K27me3* coverage/processed_empty/H3K27me3
-mv coverage/processed_empty/H3K36me3* coverage/processed_empty/H3K36me3
-mv coverage/processed_empty/H3K56ac* coverage/processed_empty/H3K56ac
