@@ -10,7 +10,12 @@ CPU=$SLURM_CPUS_ON_NODE
 if [ -z $CPU ]; then
 	CPU=1
 fi
-CPUS=$CPU
+CPUS=$(expr $CPU / 2)
+MOSCPU=2 # lets run mosdepth with 2 cores
+if [[ $CPUS -lt 1 ]]; then
+	CPUS=1
+	MOSCPU=1
+fi
 
 BAM=bam
 GENOME=genome/Oryza_sativa.IRGSP-1.0.30.dna.toplevel.fa
@@ -20,20 +25,5 @@ mkdir -p $COV
 for WINDOW in 10000 5000 1000 500
 do
     parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
-		 -j $CPUS mosdepth -f $GENOME -x -n --by $WINDOW $COV/{///}_{/.}_w${WINDOW} {} ::: $(ls $BAM/*/*.bam)
+		 -j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $WINDOW $COV/{///}/{///}_{/.}_w${WINDOW} {} ::: $(ls $BAM/*/*.bam)
 done
-
-mkdir coverage/processed_windows/tmp
-mv coverage/processed_windows/*bed.gz.csi coverage/processed_windows/tmp
-mv coverage/processed_windows/*global.dist.txt coverage/processed_windows/tmp
-mv coverage/processed_windows/*region.dist.txt coverage/processed_windows/tmp
-
-mkdir coverage/processed_windows/ATAC
-mkdir coverage/processed_windows/H3K27me3
-mkdir coverage/processed_windows/H3K36me3
-mkdir coverage/processed_windows/H3K56ac
-
-mv coverage/processed_windows/ATAC* coverage/processed_windows/ATAC
-mv coverage/processed_windows/H3K27me3* coverage/processed_windows/H3K27me3
-mv coverage/processed_windows/H3K36me3* coverage/processed_windows/H3K36me3
-mv coverage/processed_windows/H3K56ac* coverage/processed_windows/H3K56ac
