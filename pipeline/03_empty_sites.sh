@@ -21,7 +21,7 @@ fi
 cut -f 1,2 $GENOME.fai > $GENOME.genome
 
 COV=coverage/processed_empty
-TMP=03_processed_empty
+TMP=tmp/03_processed_empty
 mkdir -p $COV $TMP
 
 # For HEG4 and EG4
