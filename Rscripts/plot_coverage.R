@@ -5,8 +5,8 @@ library(ggplot2)
 library(gridExtra)
 
 # create list of all .csv files in folder
-infolder <- "/rhome/ysun/bigdata/epigenome/attack_ATAC/coverage/processed_empty/H3K56ac"
-plotfolder="plots/H3K56ac"
+infolder <- "/rhome/ysun/bigdata/epigenome/attack_ATAC/coverage/processed_background/ATAC"
+plotfolder="plots/"
 
 # functions
 plot_histo <- function(bedfile) {
@@ -55,8 +55,3 @@ plot_box <- function(bedfile) {
 # main code
 file_list <- list.files(path=infolder, pattern="bed.gz$",full.names=TRUE)
 plotsbox <- lapply(file_list,plot_box)
-
-
-
-
-
