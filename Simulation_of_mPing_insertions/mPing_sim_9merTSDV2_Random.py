@@ -32,12 +32,12 @@ def blackchroms(infile):
             line = line.rstrip()
             if len(line) > 2:
                 unit = re.split(r'\t',line)
-                data[unit[1] + '_' + unit[2]] = unit[0] 
+                data[unit[1] + '_' + unit[2]] = unit[0]
     return data
 
 def convert_position(start, end, chroms):
     for p in sorted(chroms.keys()):
-        p1 = re.split(r'_', p)   
+        p1 = re.split(r'_', p)
         if start >= int(p1[0]) and end <= int(p1[1]):
             start1 = start - int(p1[0])
             end1   = end - int(p1[0])
@@ -49,7 +49,7 @@ def blacklist(infile):
     with open (infile, 'r') as filehd:
         for line in filehd:
             line = line.rstrip()
-            if len(line) > 2: 
+            if len(line) > 2:
                 unit = re.split(r'\t',line)
                 data[unit[0]] = 1
     return data
@@ -59,18 +59,18 @@ def blacklist(infile):
 def fasta(fastafile):
     fastaid = defaultdict(str)
     fastalen = defaultdict(int)
-    with bz2.BZ2File(fastafile,"r") as fh:
+    with open(fastafile,"r") as fh:
         for record in SeqIO.parse(fh,"fasta"):
             print record.id
             seq = str(record.seq.upper())
             fastaid[record.id] = seq
-            fastalen[record.id] = len(seq) 
+            fastalen[record.id] = len(seq)
         return fastaid, fastalen
 
-def complement(s): 
-    basecomplement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'} 
-    letters = list(s) 
-    letters = [basecomplement[base] for base in letters] 
+def complement(s):
+    basecomplement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+    letters = list(s)
+    letters = [basecomplement[base] for base in letters]
     return ''.join(letters)
 
 def revcom(s):
@@ -96,7 +96,7 @@ def readmatrix(infile):
     with open (infile, 'r') as filehd:
         for line in filehd:
             line = line.rstrip()
-            if len(line) > 2 and line.startswith(r'0'): 
+            if len(line) > 2 and line.startswith(r'0'):
                 unit = re.split(r'\t',line)
                 data['A'][count] = float(unit[0])
                 data['C'][count] = float(unit[1])
@@ -107,7 +107,7 @@ def readmatrix(infile):
 
 def validdna(dna):
     flag = 1
-    bases = ['A', 'T', 'C', 'G'] 
+    bases = ['A', 'T', 'C', 'G']
     for b in dna:
         if b not in bases:
             flag = 0
@@ -130,7 +130,7 @@ def insertion_in_genome(fastaseq, fastalen, matrix, use_freq, blacks, chroms):
             continue
         # get 9mer of random site
         s    = rpos-1
-        e    = s + 9 
+        e    = s + 9
         sitep = seq[s:e]
         # skip sites if contain non-ATCG bases
         if not validdna(sitep):
@@ -192,10 +192,10 @@ def simulate(fastaseq, fastalen, matrix, outdir, replicate, size, use_freq, blac
         for i in range(1, int(size)+1):
             print 'Simulating %s mPing site' %(i)
             sys.stdout.flush()
-            mping = insertion_in_genome(fastaseq, fastalen, matrix, use_freq, blacks, chroms) 
+            mping = insertion_in_genome(fastaseq, fastalen, matrix, use_freq, blacks, chroms)
             print >> ofile, '%s\tSimulate\tmPing\t%s\t%s\t.\t%s\t.\tID=mPing_%s' %(mping[0], mping[1], mping[2], mping[3], i)
         ofile.close()
-        # sort gff file by coordinate 
+        # sort gff file by coordinate
         cmd1 = 'sort -k1,1 -k4,4n %s > %s' %(tempgff, filename)
         cmd2 = 'rm %s' %(tempgff)
         os.system(cmd1)
@@ -228,17 +228,16 @@ def main():
     except:
         usage()
         sys.exit(2)
-   
- 
+
+
     #ref = '/rhome/cjinfeng/BigData/00.RD/seqlib/MSU_r7.fa'
-    ref = 'MSU7.Simulation.Genome.fa.bz2'
+    ref = 'MSU7.Simulation.Genome.fa'
     fastaseq, fastalen = fasta(ref)
     matrix = readmatrix(args.input)
     blacks = blacklist('MSU7.Simulation.Blacklist')
     chroms = blackchroms('MSU7.Simulation.Chr')
     simulate(fastaseq, fastalen, matrix, args.output, args.replicate, args.size, args.use_freq, blacks, chroms)
-    
+
 
 if __name__ == '__main__':
     main()
-
