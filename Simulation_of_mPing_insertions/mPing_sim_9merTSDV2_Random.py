@@ -61,7 +61,6 @@ def fasta(fastafile):
     fastalen = defaultdict(int)
     with open(fastafile,"r") as fh:
         for record in SeqIO.parse(fh,"fasta"):
-            print record.id
             seq = str(record.seq.upper())
             fastaid[record.id] = seq
             fastalen[record.id] = len(seq)
@@ -147,6 +146,9 @@ def insertion_in_genome(fastaseq, fastalen, matrix, use_freq, blacks, chroms):
             probp = probp*matrix[basep][i]
             probn = probn*matrix[basen][i]
         prob = max(probp, probn)
+        # use max probability to detertmine plus or minus strand the new insertion is going to be
+        site = sitep if probp == prob else siten
+        strand = '+' if probp == prob else '-'
         # use_freq==1 : use max probability to detertmine plus or minus strand the new insertion is going to be
         # use_freq==0 : random plus and minus strand
         site = ''

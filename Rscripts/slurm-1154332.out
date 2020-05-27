@@ -1,0 +1,9 @@
+Registered S3 methods overwritten by 'ggplot2':
+  method         from 
+  [.quosures     rlang
+  c.quosures     rlang
+  print.quosures rlang
+Error in grDevices::pdf(file = filename, ..., version = version) : 
+  cannot open file 'plots/boxplot_example.pdf'
+Calls: ggsave -> dev -> <Anonymous>
+Execution halted
