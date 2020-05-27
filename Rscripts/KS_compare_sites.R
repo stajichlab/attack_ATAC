@@ -61,7 +61,7 @@ for (mark in c("H3K56ac","H3K27me3","ATAC","H3K36me3") ) {
                                           Pvalue = ks.result$p.value,
                                           Median_Obs = median(obsin$Coverage),
                                           Median_Sim = median(simin$Coverage))
-                
+
                 ks_set = bind_rows(ks_set,k)
 #                boxplot <- ggplot(combo, aes(x=Strain,y=Coverage,color=Strain)) +
 #                  geom_boxplot() +
@@ -71,20 +71,20 @@ for (mark in c("H3K56ac","H3K27me3","ATAC","H3K36me3") ) {
 #                    legend.position="none",
 #                    plot.title = element_text(size=11)
 #                  ) + scale_fill_brewer(palette="Set1") +
-#                 ggtitle(sprintf("Coverage of %s %s",mark,strain)) + xlab("Strain") + 
+#                 ggtitle(sprintf("Coverage of %s %s",mark,strain)) + xlab("Strain") +
 #                    ylab(sprintf("%s Coverage",mark))
             }
         }
   }
 }
 write_csv(ks_set,"ks_compare_Obs-vs-Sim.csv")
-outplotfile <- "plots/boxplots.pdf"
+outplotfile <- "plots/emptysitemPing_compare_epi.pdf"
 boxplot <- ggplot(Total, aes(x=Mark,y=Coverage,color=Mark)) +
   geom_boxplot() +
   geom_jitter(color="black", size=0.4, alpha=0.9) +
   theme_bw() +
   theme(
     legend.position="none",
-    plot.title = element_text(size=11)) + scale_fill_brewer(palette="Set1") + 
+    plot.title = element_text(size=11)) + scale_fill_brewer(palette="Set1") +
   ylab("Coverage") + facet_grid(cols=vars(Type),rows=vars(Strain))
 ggsave(outplotfile,boxplot,width=10,height=8)
