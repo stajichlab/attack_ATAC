@@ -4,11 +4,12 @@ from collections import defaultdict
 from numpy import *
 import re
 import os, gzip
+import bz2
 import argparse
 from Bio import SeqIO
 import random
 
-random.seed(a=None)
+#random.seed(a=None)
 
 def usage():
     test="name"
@@ -58,13 +59,13 @@ def blacklist(infile):
 def fasta(fastafile):
     fastaid = defaultdict(str)
     fastalen = defaultdict(int)
-    fh = gzip.open(fastafile,"r")
-    for record in SeqIO.parse(fh,"fasta"):
-        #print record.id
-        seq = str(record.seq.upper())
-        fastaid[record.id] = seq
-        fastalen[record.id] = len(seq) 
-    return fastaid, fastalen
+    with bz2.BZ2File(fastafile,"r") as fh:
+        for record in SeqIO.parse(fh,"fasta"):
+            print record.id
+            seq = str(record.seq.upper())
+            fastaid[record.id] = seq
+            fastalen[record.id] = len(seq) 
+        return fastaid, fastalen
 
 def complement(s): 
     basecomplement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'} 
@@ -138,6 +139,8 @@ def insertion_in_genome(fastaseq, fastalen, matrix, use_freq, blacks, chroms):
         siten = revcom(sitep)
         probp = 1.00 #plus strand
         probn = 1.00 #minus strand
+        if len(sitep) < 9:
+            continue
         for i in range(0,9):
             basep = sitep[i]
             basen = siten[i]
@@ -228,7 +231,7 @@ def main():
    
  
     #ref = '/rhome/cjinfeng/BigData/00.RD/seqlib/MSU_r7.fa'
-    ref = 'MSU7.Simulation.Genome.fa.gz'
+    ref = 'MSU7.Simulation.Genome.fa.bz2'
     fastaseq, fastalen = fasta(ref)
     matrix = readmatrix(args.input)
     blacks = blacklist('MSU7.Simulation.Blacklist')
