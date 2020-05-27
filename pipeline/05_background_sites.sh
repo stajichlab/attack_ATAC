@@ -29,8 +29,6 @@ TMP=tmp/05_processed_background # I like to keep a clean folder so I would use t
  # and also have a cleanup step that rm -rf tmp
 
 mkdir -p $COV $TMP
-# For HEG4 and EG4
-# Get HEG4 empty sites (mPing in EG4 but not in HEG4)
 for infile in $(ls $MPING/*.gff)
 do
     base=$(basename $infile .gff)
