@@ -5,7 +5,9 @@ library(ggplot2)
 library(gridExtra)
 
 # create list of all .csv files in folder
-infolder <- "/rhome/ysun/bigdata/epigenome/attack_ATAC/coverage/processed_empty/H3K56ac"
+# I WOULD MAKE THIS RELATIVE NOT ABSOLUTE
+#infolder <- "/rhome/ysun/bigdata/epigenome/attack_ATAC/"
+infolder <- "coverage/processed_empty/H3K56ac"
 plotfolder="plots/H3K56ac"
 
 # functions
