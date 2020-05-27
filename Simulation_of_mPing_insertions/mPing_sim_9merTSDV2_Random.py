@@ -3,11 +3,21 @@ import sys
 from collections import defaultdict
 from numpy import *
 import re
+<<<<<<< HEAD
 import os
+=======
+import os, gzip
+import bz2
+>>>>>>> 29c91d6ec7eb68e0720155acc1e1388374169381
 import argparse
 from Bio import SeqIO
 import random
 
+<<<<<<< HEAD
+=======
+#random.seed(a=None)
+
+>>>>>>> 29c91d6ec7eb68e0720155acc1e1388374169381
 def usage():
     test="name"
     message='''
@@ -56,12 +66,22 @@ def blacklist(infile):
 def fasta(fastafile):
     fastaid = defaultdict(str)
     fastalen = defaultdict(int)
+<<<<<<< HEAD
     for record in SeqIO.parse(fastafile,"fasta"):
         #print record.id
         seq = str(record.seq.upper())
         fastaid[record.id] = seq
         fastalen[record.id] = len(seq) 
     return fastaid, fastalen
+=======
+    with bz2.BZ2File(fastafile,"r") as fh:
+        for record in SeqIO.parse(fh,"fasta"):
+            print record.id
+            seq = str(record.seq.upper())
+            fastaid[record.id] = seq
+            fastalen[record.id] = len(seq) 
+        return fastaid, fastalen
+>>>>>>> 29c91d6ec7eb68e0720155acc1e1388374169381
 
 def complement(s): 
     basecomplement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'} 
@@ -135,15 +155,34 @@ def insertion_in_genome(fastaseq, fastalen, matrix, use_freq, blacks, chroms):
         siten = revcom(sitep)
         probp = 1.00 #plus strand
         probn = 1.00 #minus strand
+<<<<<<< HEAD
+=======
+        if len(sitep) < 9:
+            continue
+>>>>>>> 29c91d6ec7eb68e0720155acc1e1388374169381
         for i in range(0,9):
             basep = sitep[i]
             basen = siten[i]
             probp = probp*matrix[basep][i]
             probn = probn*matrix[basen][i]
         prob = max(probp, probn)
+<<<<<<< HEAD
         # use max probability to detertmine plus or minus strand the new insertion is going to be
         site = sitep if probp == prob else siten
         strand = '+' if probp == prob else '-'
+=======
+        # use_freq==1 : use max probability to detertmine plus or minus strand the new insertion is going to be
+        # use_freq==0 : random plus and minus strand
+        site = ''
+        strand = ''
+        if int(use_freq) == 1:
+            site = sitep if probp == prob else siten
+            strand = '+' if probp == prob else '-'
+        else:
+            rn_strand = random.random()
+            site = sitep if rn_strand < 0.5 else siten
+            strand = '+' if rn_strand < 0.5 else '-'
+>>>>>>> 29c91d6ec7eb68e0720155acc1e1388374169381
         # determine whether put this insertion in simuation gff file
         # if use frequency matrix, the chance of outputing this insertion gff depend on prob
         if int(use_freq) == 1:
@@ -217,7 +256,11 @@ def main():
    
  
     #ref = '/rhome/cjinfeng/BigData/00.RD/seqlib/MSU_r7.fa'
+<<<<<<< HEAD
     ref = 'MSU7.Simulation.Genome.fa'
+=======
+    ref = 'MSU7.Simulation.Genome.fa.bz2'
+>>>>>>> 29c91d6ec7eb68e0720155acc1e1388374169381
     fastaseq, fastalen = fasta(ref)
     matrix = readmatrix(args.input)
     blacks = blacklist('MSU7.Simulation.Blacklist')
