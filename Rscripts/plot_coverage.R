@@ -4,16 +4,10 @@ library(tools)
 library(ggplot2)
 library(gridExtra)
 
-# create list of all .csv files in folder
-<<<<<<< HEAD
-infolder <- "/rhome/ysun/bigdata/epigenome/attack_ATAC/coverage/processed_background/ATAC"
-plotfolder="plots/"
-=======
 # I WOULD MAKE THIS RELATIVE NOT ABSOLUTE
 #infolder <- "/rhome/ysun/bigdata/epigenome/attack_ATAC/"
 infolder <- "coverage/processed_empty/H3K56ac"
 plotfolder="plots/H3K56ac"
->>>>>>> 29c91d6ec7eb68e0720155acc1e1388374169381
 
 # functions
 plot_histo <- function(bedfile) {
