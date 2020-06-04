@@ -57,10 +57,12 @@ for (mark in c("H3K56ac","H3K27me3","ATAC","H3K36me3") ) {
                 Total = bind_rows(Total,combo)
                 #glimpse(combo)
                 ks.result <- ks.test(simin$Coverage,obsin$Coverage)
-                k = tibble(Compare  = sprintf("%s-%s-%d",strain,mark,size),
-                                          Pvalue = ks.result$p.value,
-                                          Median_Obs = median(obsin$Coverage),
-                                          Median_Sim = median(simin$Coverage))
+                k = tibble(Strain  = strain,
+                           Mark    = mark,
+                           Window_size = size,
+                           Pvalue = ks.result$p.value,
+                           Median_Obs = median(obsin$Coverage),
+                           Median_Sim = median(simin$Coverage))
 
                 ks_set = bind_rows(ks_set,k)
 #                boxplot <- ggplot(combo, aes(x=Strain,y=Coverage,color=Strain)) +
@@ -77,7 +79,7 @@ for (mark in c("H3K56ac","H3K27me3","ATAC","H3K36me3") ) {
         }
   }
 }
-write_csv(ks_set,"ks_compare_Obs-vs-Sim.csv")
+write_csv(ks_set,"results/ks_compare_Obs-vs-Sim.csv")
 outplotfile <- "plots/emptysitemPing_compare_epi.pdf"
 boxplot <- ggplot(Total, aes(x=Mark,y=Coverage,color=Mark)) +
   geom_boxplot() +
