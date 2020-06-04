@@ -64,5 +64,3 @@ H3K56ac.HEG4_empty.500 <- c(H3K56ac.HEG4.rep1.HEG4_empty.500, H3K56ac.HEG4.rep2.
 H3K56ac_HEG4.99_background_sites.500 <- c(H3K56ac_HEG4.rep1.99_background_sites.500, H3K56ac_HEG4.rep2.99_background_sites.500)
 
 ks.test(H3K56ac_HEG4.99_background_sites.500, H3K56ac.HEG4_empty.500)
-
-
