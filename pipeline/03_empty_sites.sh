@@ -54,7 +54,6 @@ do
 		BEDFILE=$TMP/${strain}_empty.${total}_window.bed
 		NEWBASE=${strain}_empty.${total}
 		bedtools slop -i $TMP/${strain}_empty_sites.bed -g $GENOME.genome -b $size  > $BEDFILE
-
 		parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
 		-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BEDFILE $COV/{///}/{///}_{/.}.${NEWBASE} {} ::: $(ls $BAM/*/${strain}*.bam)
 	done
