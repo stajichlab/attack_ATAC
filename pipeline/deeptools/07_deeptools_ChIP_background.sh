@@ -50,13 +50,13 @@ for size in 250 500
             #bamCoverage -b $BAM/$datatype/${strain}.rep2.bam -o $COV/$datatype${strain}.rep2.bw -bs=1 -p=max
          
             # Background_rep1
-            computeMatrix reference-point -S $COV/$datatype${strain}.rep1.bw -R tmp/04_background_sites/Simulate0001_${strain}_background_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}${total}rep1_background --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            plotHeatmap -m $COV/$datatypeCMref${strain}${total}rep1_background -out $COV/${datatype}CMref${strain}${total}rep1_backgroundheatmap --colorList white,blue --sortUsing max
-            plotProfile -m $COV/$datatypeCMref${strain}${total}rep1_background -out $COV/${datatype}CMref${strain}${total}rep1_backgroundprofile --perGroup --plotType=fill
+            computeMatrix reference-point -S $COV/$datatype${strain}.rep1.bw -R tmp/04_background_sites/Simulate0001_${strain}_background_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}rep1_background --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
+            plotHeatmap -m $COV/$datatypeCMref${strain}rep1_background -out $COV/${datatype}CMref${strain}rep1_backgroundheatmap --colorList white,blue --sortUsing max
+            plotProfile -m $COV/$datatypeCMref${strain}rep1_background -out $COV/${datatype}CMref${strain}rep1_backgroundprofile --perGroup --plotType=fill
             # Background_rep2
-            computeMatrix reference-point -S $COV/$datatype${strain}.rep2.bw -R tmp/04_background_sites/Simulate0001_${strain}_background_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}${total}rep2_background --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            plotHeatmap -m $COV/$datatypeCMref${strain}${total}rep2_background -out $COV/${datatype}CMref${strain}${total}rep2_backgroundheatmap --colorList white,blue --sortUsing max
-            plotProfile -m $COV/$datatypeCMref${strain}${total}rep2_background -out $COV/${datatype}CMref${strain}${total}rep2_backgroundprofile --perGroup --plotType=fill
+            computeMatrix reference-point -S $COV/$datatype${strain}.rep2.bw -R tmp/04_background_sites/Simulate0001_${strain}_background_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}rep2_background --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
+            plotHeatmap -m $COV/$datatypeCMref${strain}rep2_background -out $COV/${datatype}CMref${strain}rep2_backgroundheatmap --colorList white,blue --sortUsing max
+            plotProfile -m $COV/$datatypeCMref${strain}rep2_background -out $COV/${datatype}CMref${strain}rep2_backgroundprofile --perGroup --plotType=fill
             
 
    done
