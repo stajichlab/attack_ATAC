@@ -49,19 +49,19 @@ for size in 250 500
             #bamCoverage -b $BAM/$datatype/${strain}.bam -o $COV/$datatype${strain}.bw -bs=1 -p=max
 
             # Background
-            #computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/04_background_sites/Simulate0001_${strain}_background_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}${total}_background --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            #plotHeatmap -m $COV/$datatypeCMref${strain}${total}_background -out $COV/${datatype}CMref${strain}${total}_backgroundheatmap --colorList white,blue --sortUsing max
-            #plotProfile -m $COV/$datatypeCMref${strain}${total}_background -out $COV/${datatype}CMref${strain}${total}_backgroundprofile --perGroup --plotType=fill
+            #computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/04_background_sites/Simulate0001_${strain}_background_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}_background --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
+            #plotHeatmap -m $COV/$datatypeCMref${strain}_background -out $COV/${datatype}CMref${strain}_backgroundheatmap --colorList white,blue --sortUsing max
+            #plotProfile -m $COV/$datatypeCMref${strain}_background -out $COV/${datatype}CMref${strain}_backgroundprofile --perGroup --plotType=fill
 
             # Shared
-            #computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/05_processed_shared/${strain}_shared_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}${total}_shared --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            #plotHeatmap -m $COV/$datatypeCMref${strain}${total}_shared -out $COV/${datatype}CMref${strain}${total}_sharedheatmap --colorList white,blue --sortUsing max
-            #plotProfile -m $COV/$datatypeCMref${strain}${total}_shared -out $COV/${datatype}CMref${strain}${total}_sharedprofile --perGroup --plotType=fill
+            #computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/05_processed_shared/${strain}_shared_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}_shared --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
+            #plotHeatmap -m $COV/$datatypeCMref${strain}_shared -out $COV/${datatype}CMref${strain}_sharedheatmap --colorList white,blue --sortUsing max
+            #plotProfile -m $COV/$datatypeCMref${strain}_shared -out $COV/${datatype}CMref${strain}_sharedprofile --perGroup --plotType=fill
 
             # Empty
-            computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/03_processed_empty/${strain}_empty_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}${total}_empty --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            plotHeatmap -m $COV/$datatypeCMref${strain}${total}_empty -out $COV/${datatype}CMref${strain}${total}_emptyheatmap --colorList white,blue --sortUsing max
-            plotProfile -m $COV/$datatypeCMref${strain}${total}_empty -out $COV/${datatype}CMref${strain}${total}_emptyprofile --perGroup --plotType=fill
+            computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/03_processed_empty/${strain}_empty_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}_empty --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
+            plotHeatmap -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyheatmap --colorList white,blue --sortUsing max
+            plotProfile -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyprofile --perGroup --plotType=fill
  
    done
 done
