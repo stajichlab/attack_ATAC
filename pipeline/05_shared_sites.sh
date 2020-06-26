@@ -36,14 +36,16 @@ mkdir -p $COV $TMP
 bedtools intersect -a $MPING/EG4.gff -b $MPING/HEG4.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/HEG4_shared_sites.bed
 bedtools intersect -a $MPING/EG4.gff -b $MPING/HEG4.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/EG4_shared_sites.bed
 
-bedtools intersect -a $MPING/A119.gff -b $MPING/A123.gff -v | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/A119_shared_sites.bed
-bedtools intersect -a $MPING/A119.gff -b $MPING/A123.gff -v | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/A123_shared_sites.bed
+bedtools intersect -a $MPING/A119.gff -b $MPING/A123.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/A119_shared_sites.bed
+bedtools intersect -a $MPING/A119.gff -b $MPING/A123.gff | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/A123_shared_sites.bed
+bedtools intersect -a $MPING/NB.gff -b $MPING/NB.gff -wa | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/NP_shared_sites.bed
+
 
 # use -b to add to both sides
 for size in 250 500
 do
 	total=$(expr $size \* 2)
-	for strain in HEG4 EG4 A123 A119
+	for strain in HEG4 EG4 A123 A119 NP
 	do
 		BEDFILE=$TMP/${strain}_shared.${total}_window.bed
 		NEWBASE=${strain}_shared.${total}

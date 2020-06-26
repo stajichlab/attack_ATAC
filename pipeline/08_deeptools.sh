@@ -15,3 +15,11 @@ sbatch ./pipeline/deeptools/07_deeptools_ATAC_background.sh ATAC 04_background_s
 sbatch ./pipeline/deeptools/07_deeptools_ChIP_background.sh H3K27me3 04_background_sites processed_background
 sbatch ./pipeline/deeptools/07_deeptools_ChIP_background.sh H3K36me3 04_background_sites processed_background
 sbatch ./pipeline/deeptools/07_deeptools_ChIP_background.sh H3K56ac 04_background_sites processed_background
+
+sbatch ./pipeline/deeptools/07_deeptools_ATAC_mPing.sh ATAC 07_processed_mPing processed_mPing
+sbatch ./pipeline/deeptools/07_deeptools_ChIP_mPing.sh H3K27me3 07_processed_mPing processed_mPing
+sbatch ./pipeline/deeptools/07_deeptools_ChIP_mPing.sh H3K36me3 07_processed_mPing processed_mPing
+sbatch ./pipeline/deeptools/07_deeptools_ChIP_mPing.sh H3K56ac 07_processed_mPing processed_mPing
+ 
+sbatch ./pipeline/deeptools/07_deeptools_ATAC_simplifiedshared.sh ATAC 08_processed_simplified processed_shared
+sbatch ./pipeline/deeptools/07_deeptools_ATAC_simplifiedempty.sh ATAC 08_processed_simplified processed_empty

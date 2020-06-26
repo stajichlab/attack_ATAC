@@ -30,6 +30,7 @@ cut -f 1,2 $GENOME.fai > $GENOME.genome
 
 COV=coverage/processed_empty
 TMP=tmp/03_processed_empty
+NIPPO=tmp/03_processed_empty
 mkdir -p $COV $TMP
 
 # For HEG4 and EG4
@@ -45,16 +46,20 @@ bedtools intersect -a $MPING/A119.gff -b $MPING/A123.gff -v | cut -f 1,4,5,9 | p
 # an vice versa
 bedtools intersect -a $MPING/A123.gff -b $MPING/A119.gff -v | cut -f 1,4,5,9 | perl -p -e 's/^Chr//; s/ID=//' > $TMP/A119_empty_sites.bed
 
+
+
 # use -b to add to both sides
 for size in 250 500
 do
 	total=$(expr $size \* 2)
 	for strain in HEG4 EG4 A123 A119
 	do
-		BEDFILE=$TMP/${strain}_empty.${total}_window.bed
-		NEWBASE=${strain}_empty.${total}
-		bedtools slop -i $TMP/${strain}_empty_sites.bed -g $GENOME.genome -b $size  > $BEDFILE
-		parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
-		-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BEDFILE $COV/{///}/{///}_{/.}.${NEWBASE} {} ::: $(ls $BAM/*/${strain}*.bam)
+			BEDFILE=$TMP/${strain}_empty.${total}_window.bed
+			NEWBASE=${strain}_empty.${total}
+			bedtools slop -i $TMP/${strain}_empty_sites.bed -g $GENOME.genome -b $size  > $BEDFILE
+
+			parallel --rpl '{///} $Global::use{"File::Basename"} ||= eval "use File::Basename; 1;"; $_ = basename(dirname($_));' \
+			-j $CPUS mkdir -p ${COV}/{///} \&\& mosdepth -t $MOSCPU -f $GENOME -x -n --by $BEDFILE $COV/{///}/{///}_{/.}.${NEWBASE} {} ::: $(ls $BAM/*/${strain}*.bam)
+
 	done
 done
