@@ -1,5 +1,5 @@
 #!/usr/bin/bash -l
-#SBATCH -p short --mem 24gb -N 1 -n 24 --out logs/deeptoolsATAC_empty.log
+#SBATCH -p short --mem 24gb -N 1 -n 24 --out logs/deeptools_ATAC_empty.log
 
 module load samtools
 module unload miniconda2
@@ -29,7 +29,7 @@ fi
 datatype=$1
 tmpfoldername=$2
 processed=$3
-TMP = tmp/$tmpfoldername
+TMP=tmp/$tmpfoldername
 BAM=bam
 MPING=data/mPing
 
@@ -44,24 +44,16 @@ for size in 250 500
         for strain in HEG4 EG4 A123 A119
         do
             BEDFILE=$TMP
-            NEWBASE=${strain}_shared.${total}
+            NEWBASE=${strain}_empty.
             # I think this currently runs but it's ridiculously slow for some reason
-            #bamCoverage -b $BAM/$datatype/${strain}.bam -o $COV/$datatype${strain}.bw -bs=1 -p=max
-
-            # Background
-            #computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/04_background_sites/Simulate0001_${strain}_background_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}_background --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            #plotHeatmap -m $COV/$datatypeCMref${strain}_background -out $COV/${datatype}CMref${strain}_backgroundheatmap --colorList white,blue --sortUsing max
-            #plotProfile -m $COV/$datatypeCMref${strain}_background -out $COV/${datatype}CMref${strain}_backgroundprofile --perGroup --plotType=fill
-
-            # Shared
-            #computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/05_processed_shared/${strain}_shared_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}_shared --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            #plotHeatmap -m $COV/$datatypeCMref${strain}_shared -out $COV/${datatype}CMref${strain}_sharedheatmap --colorList white,blue --sortUsing max
-            #plotProfile -m $COV/$datatypeCMref${strain}_shared -out $COV/${datatype}CMref${strain}_sharedprofile --perGroup --plotType=fill
-
+            bamCoverage -b $BAM/$datatype/${strain}.bam -o $COV/$datatype${strain}.bw -bs=1 -p=max --normalizeUsing RPKM
+    
             # Empty
             computeMatrix reference-point -S $COV/$datatype${strain}.bw -R tmp/03_processed_empty/${strain}_empty_sites.bed   --upstream 2000 --downstream 2000 -out $COV/$datatypeCMref${strain}_empty --binSize 50 --sortUsing max --skipZeros -p=max --maxThreshold 100000
-            plotHeatmap -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyheatmap --colorList white,blue --sortUsing max
-            plotProfile -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyprofile --perGroup --plotType=fill
- 
+            plotHeatmap -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyheatmap --colorList white,blue --sortUsing max --plotTitle ${datatype}CMref${strain}_empty --refPointLabel mPing
+            plotHeatmap -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyheatmapkmeans  --outFileSortedRegions  $COV/${datatype}CMref${strain}_emptyheatmapkmeans.stats --colorList white,blue --sortUsing max --plotTitle ${datatype}CMref${strain}_empty --kmeans 6  --refPointLabel mPing
+            plotProfile -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyprofile --perGroup --plotType=se --plotTitle ${datatype}CMref${strain}_empty --refPointLabel mPing
+            plotProfile -m $COV/$datatypeCMref${strain}_empty -out $COV/${datatype}CMref${strain}_emptyprofilekmeans --outFileSortedRegions $COV/${datatype}CMref${strain}_emptyprofilekmeans.stats --perGroup --plotType=se --plotTitle ${datatype}CMref${strain}_empty --kmeans 6  --refPointLabel mPing    
+
    done
 done
